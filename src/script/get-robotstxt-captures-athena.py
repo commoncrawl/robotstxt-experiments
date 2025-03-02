@@ -1,3 +1,6 @@
+"""Find robots.txt captures for a list of host names in Common Crawl's
+robots.txt dataset."""
+
 import argparse
 import logging
 import os
@@ -152,6 +155,7 @@ def redirect_targets_write(crawl, redir_depth, args, urls_seen):
 
     redirects = defaultdict(list)
     urls_seen.update(df['url'].tolist())
+    logging.info('%6d\tunique URLs known', len(urls_seen))
 
     for _idx, row in df[~df['fetch_redirect'].isnull()].iterrows():
 
@@ -175,7 +179,7 @@ def redirect_targets_write(crawl, redir_depth, args, urls_seen):
             continue
 
         if redirect_target in urls_seen:
-            counts['redirects_target_known'] += 1 # TODO: better name
+            counts['redirects_target_known'] += 1
             continue
 
         if redirect_target in redirects:
@@ -190,6 +194,9 @@ def redirect_targets_write(crawl, redir_depth, args, urls_seen):
     logging.info('Redirects processed:')
     for cnt in counts:
         logging.info('%6d\t%s', counts[cnt], cnt)
+
+    if len(redirects) == 0:
+        return 0
 
     redirects_to_follow = list()
     for redirect_target in redirects:
@@ -211,6 +218,8 @@ def redirect_targets_write(crawl, redir_depth, args, urls_seen):
                                                    'from_url', 'from_fetch_status',
                                                    'from_to_is_same_host', 'to_url'])
     df_redirects_to_follow.to_parquet(target_path, compression='zstd')
+
+    return len(redirects)
 
 def redirect_targets_load_partitions(args):
     query = 'MSCK REPAIR TABLE `{database}`.`redirects_to_follow`;'.format(
@@ -283,6 +292,9 @@ for crawl in args.crawl_data_set:
     # RFC 9390 says "to follow at least five consecutive redirects"
     for i in range(0, 5):
         logging.info('Following redirects (from depth = %i)', i)
-        redirect_targets_write(crawl, i, args, urls_seen)
+        target_count = redirect_targets_write(crawl, i, args, urls_seen)
+        if target_count == 0:
+            logging.info("No redirects found at level %i, stopping.", i)
+            break
         redirect_targets_load_partitions(args)
         redirect_lookup(crawl, i, (i+1), cursor, args)
