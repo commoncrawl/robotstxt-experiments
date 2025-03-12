@@ -180,14 +180,13 @@ def redirect_targets_write(crawl, redir_depth, args, urls_seen):
 
         if redirect_target in urls_seen:
             counts['redirects_target_known'] += 1
-            continue
-
-        if redirect_target in redirects:
+        elif redirect_target in redirects:
             counts['redirects_duplicates'] += 1
-            # append anyway because we need to track the chain
-            # from the initial /robots.txt to the final location
         else:
             counts['redirects_to_follow'] += 1
+        # Append also known redirect targets because we need to track
+        # the chain from the initial /robots.txt to the final location.
+        # WARC records are deduplicated before download.
         redirects[redirect_target].append(row)
 
 

@@ -1,5 +1,6 @@
-"""Extract download list of WARC records from result from
-`get_robotstxt_captures_athena.py`."""
+"""Extract download list of WARC records from the result of
+`get_robotstxt_captures_athena.py`.
+"""
 
 import argparse
 import os
