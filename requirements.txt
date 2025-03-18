@@ -1,5 +1,6 @@
 pandas
-pyarrow
 pyathena
 s3fs
 tldextract
+ujson
+zstandard
