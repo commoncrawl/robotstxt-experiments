@@ -17,6 +17,11 @@ The necessary steps are described in the [data preparation notebook](./src/jupyt
 
 ## Metrics and Findings
 
+- [top-k metrics notebook](./src/jupyter/metrics-top-k-sample.ipynb): first aggregations and few plots
+- [user-agent metrics notebook](./src/jupyter/metrics-user-agents.ipynb): more plots about user-agents addressed in robots.txt files
+
+## Poster at IIPC Web Archiving Conference 2025
+
 
 
 ## Notes and Credits
