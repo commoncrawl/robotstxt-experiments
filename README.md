@@ -22,7 +22,8 @@ The necessary steps are described in the [data preparation notebook](./src/jupyt
 
 ## Poster at IIPC Web Archiving Conference 2025
 
-
+Condensed results of this project were presented as poster on the [IIPC Web Archiving Conference 2025](https://netpreserve.org/ga2025/).
+A copy of the poster is available [here](./docs/robotstxt-crawler-politeness-wac2025-sn-tv.pdf).
 
 ## Notes and Credits
 
